@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="КиберЩит — учебный веб-сервис для освоения основ цифровой безопасности.">
+  <title>КиберЩит — цифровая безопасность</title>
+  <style>
+    :root {
+      --bg: #08111f; --panel: #101d30; --panel2: #14243a; --text: #edf5ff;
+      --muted: #a5b6cc; --accent: #42d6c5; --accent2: #5da8ff;
+      --border: rgba(177, 204, 237, .15); --warning: #ffd166; --danger: #ff7777;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+      background: radial-gradient(circle at 80% 0%, #142d4b 0, var(--bg) 42%); color: var(--text); line-height: 1.55; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header { border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 5; backdrop-filter: blur(16px); background: rgba(8,17,31,.88); }
+    .top { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.2px; font-size:1.15rem; }
+    .logo { width:42px; height:42px; display:grid; place-items:center; border-radius:14px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#061525; font-size:1.35rem; }
+    nav { display:flex; flex-wrap:wrap; gap:7px; }
+    nav button { border:1px solid transparent; color:var(--muted); background:transparent; padding:9px 12px; border-radius:10px; }
+    nav button:hover, nav button.active { color:var(--text); background:var(--panel2); border-color:var(--border); }
+    main { padding: 36px 0 60px; }
+    .hero { display:grid; grid-template-columns:1.35fr .65fr; gap:28px; align-items:center; padding:34px 0 38px; }
+    .eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:2px; font-size:.78rem; font-weight:800; }
+    h1 { font-size:clamp(2.3rem,5vw,4.3rem); line-height:1.04; letter-spacing:-1.8px; margin:12px 0 18px; }
+    h2 { font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.6px; margin:0 0 10px; }
+    h3 { margin:0 0 7px; font-size:1.1rem; }
+    p { color:var(--muted); margin:0 0 14px; }
+    .hero p { font-size:1.08rem; max-width:650px; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
+    .btn { border:0; border-radius:12px; padding:12px 17px; font-weight:750; background:var(--accent); color:#061925; }
+    .btn:hover { filter:brightness(1.07); transform:translateY(-1px); }
+    .btn.secondary { background:var(--panel2); color:var(--text); border:1px solid var(--border); }
+    .shield-card { min-height:265px; border:1px solid var(--border); border-radius:26px; background:linear-gradient(145deg,rgba(66,214,197,.13),rgba(93,168,255,.06)); display:grid; place-items:center; position:relative; overflow:hidden; }
+    .shield-art { width:150px; height:170px; display:grid; place-items:center; font-size:5.2rem; color:var(--accent); filter:drop-shadow(0 0 24px rgba(66,214,197,.35)); }
+    .orb { position:absolute; width:240px; height:240px; border:1px solid rgba(66,214,197,.17); border-radius:50%; }
+    .orb.two { width:310px; height:310px; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:12px 0 38px; }
+    .stat, .card, .panel { background:rgba(16,29,48,.88); border:1px solid var(--border); border-radius:18px; padding:20px; }
+    .stat strong { display:block; font-size:1.45rem; color:var(--text); }
+    .stat span { color:var(--muted); font-size:.9rem; }
+    .section-head { margin: 34px 0 18px; }
+    .cards { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+    .card { transition:transform .15s ease,border-color .15s ease; }
+    .card:hover { transform:translateY(-2px); border-color:rgba(66,214,197,.4); }
+    .card-icon { width:44px; height:44px; display:grid; place-items:center; border-radius:13px; background:var(--panel2); font-size:1.35rem; margin-bottom:15px; }
+    .card .btn { margin-top:7px; }
+    .view { display:none; }
+    .view.active { display:block; }
+    .panel { max-width:850px; margin:0 auto; }
+    .question { padding:15px 0; border-bottom:1px solid var(--border); }
+    .question:last-child { border-bottom:0; }
+    .question label { display:flex; gap:10px; align-items:flex-start; cursor:pointer; }
+    input[type=checkbox], input[type=radio] { accent-color:var(--accent); margin-top:5px; transform:scale(1.12); }
+    .result { margin-top:18px; border-radius:14px; padding:16px; background:var(--panel2); border:1px solid var(--border); }
+    .result.good { border-color:rgba(66,214,197,.5); }
+    .result.warn { border-color:rgba(255,209,102,.55); }
+    .result.bad { border-color:rgba(255,119,119,.55); }
+    .field { width:100%; padding:13px 14px; border-radius:12px; border:1px solid var(--border); background:#091626; color:var(--text); margin:7px 0 12px; }
+    .small { font-size:.9rem; }
+    .pill { display:inline-block; border:1px solid var(--border); color:var(--muted); padding:4px 9px; border-radius:999px; font-size:.78rem; margin:3px 4px 3px 0; }
+    .quiz-option { display:block; width:100%; text-align:left; padding:13px 14px; margin:9px 0; border-radius:12px; border:1px solid var(--border); background:#0b1829; color:var(--text); }
+    .quiz-option:hover { border-color:var(--accent); }
+    .quiz-option:disabled { cursor:default; opacity:.9; }
+    .progress { height:7px; border-radius:10px; background:#24354b; overflow:hidden; margin:15px 0 20px; }
+    .progress span { display:block; height:100%; background:var(--accent); width:0%; transition:width .2s; }
+    .guide-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+    footer { border-top:1px solid var(--border); padding:22px 0 30px; color:var(--muted); font-size:.88rem; }
+    .notice { border-left:3px solid var(--warning); padding:12px 14px; background:rgba(255,209,102,.07); border-radius:0 10px 10px 0; color:var(--muted); margin-top:18px; }
+    @media (max-width:760px) {
+      .top { align-items:flex-start; flex-direction:column; padding:13px 0; gap:10px; }
+      nav { width:100%; }
+      nav button { padding:8px 9px; font-size:.88rem; }
+      .hero { grid-template-columns:1fr; padding-top:18px; }
+      .shield-card { min-height:180px; }
+      .shield-art { font-size:4rem; height:120px; }
+      .stats { grid-template-columns:1fr; }
+      .cards, .guide-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap top">
+    <div class="brand"><div class="logo">⬡</div><span>КиберЩит</span></div>
+    <nav aria-label="Основная навигация">
+      <button class="active" data-view="home">Главная</button>
+      <button data-view="check">Самооценка</button>
+      <button data-view="links">Ссылки</button>
+      <button data-view="quiz">Тренажёр</button>
+      <button data-view="guide">Справочник</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  <section class="view active" id="home">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Твоя безопасность начинается с знаний</div>
+        <h1>Защищайся<br>с умом.</h1>
+        <p>Проверь свои привычки, научись замечать подозрительные ссылки и закрепи базовые правила цифровой безопасности.</p>
+        <div class="actions">
+          <button class="btn" data-go="check">Проверить безопасность →</button>
+          <button class="btn secondary" data-go="quiz">Пройти тренажёр</button>
+        </div>
+      </div>
+      <div class="shield-card" aria-hidden="true"><div class="orb"></div><div class="orb two"></div><div class="shield-art">⬡</div></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><strong>4 раздела</strong><span>Инструменты и полезные материалы</span></div>
+      <div class="stat"><strong>Без установки</strong><span>Работает в современном браузере</span></div>
+      <div class="stat"><strong>Учебный проект</strong><span>Объясняет риски, а не обещает абсолютную защиту</span></div>
+    </div>
+    <div class="section-head"><h2>Что ты можешь сделать</h2><p>Выбери инструмент и начни с простого шага.</p></div>
+    <div class="cards">
+      <article class="card"><div class="card-icon">🛡️</div><h3>Оценить привычки</h3><p>Ответь на вопросы о защите устройства и получи персональные рекомендации.</p><button class="btn secondary" data-go="check">Начать проверку</button></article>
+      <article class="card"><div class="card-icon">🔎</div><h3>Разобрать ссылку</h3><p>Найди некоторые признаки риска в адресе сайта, не открывая его.</p><button class="btn secondary" data-go="links">Проверить URL</button></article>
+      <article class="card"><div class="card-icon">🎯</div><h3>Проверить знания</h3><p>Ответь на вопросы о фишинге, паролях и загрузке файлов.</p><button class="btn secondary" data-go="quiz">Запустить тест</button></article>
+      <article class="card"><div class="card-icon">📘</div><h3>Изучить рекомендации</h3><p>Посмотри базовые меры защиты аккаунтов и устройств.</p><button class="btn secondary" data-go="guide">Открыть справочник</button></article>
+    </div>
+    <div class="notice"><strong>Важно:</strong> «КиберЩит» — учебный помощник, а не антивирус. Он не сканирует файлы и не может гарантировать безопасность сайта.</div>
+  </section>
+
+  <section class="view" id="check">
+    <div class="section-head"><div class="eyebrow">Инструмент 01</div><h2>Самооценка цифровой безопасности</h2><p>Отметь утверждения, которые подходят тебе. Ответы обрабатываются в браузере и не отправляются на сервер.</p></div>
+    <div class="panel">
+      <form id="checkForm">
+        <div id="checkQuestions"></div>
+        <button class="btn" type="submit">Получить рекомендации</button>
+        <button class="btn secondary" type="reset">Сбросить ответы</button>
+      </form>
+      <div id="checkResult" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="view" id="links">
+    <div class="section-head"><div class="eyebrow">Инструмент 02</div><h2>Анализатор ссылок</h2><p>Вставь адрес, чтобы проверить его на некоторые распространённые подозрительные признаки.</p></div>
+    <div class="panel">
+      <label for="urlInput"><strong>Адрес сайта (URL)</strong></label>
+      <input class="field" id="urlInput" type="text" placeholder="Например: https://example.com" autocomplete="off">
+      <button class="btn" id="analyzeBtn">Проанализировать</button>
+      <div id="urlResult" aria-live="polite"></div>
+      <div class="notice">Анализ выполняется локально по структуре адреса. Он не проверяет содержимое сайта и не определяет все виды мошенничества. Не вставляй ссылки с личными токенами или секретными параметрами.</div>
+    </div>
+  </section>
+
+  <section class="view" id="quiz">
+    <div class="section-head"><div class="eyebrow">Инструмент 03</div><h2>Тренажёр цифровой безопасности</h2><p>Выбирай ответ и читай объяснение. В конце увидишь результат.</p></div>
+    <div class="panel" id="quizPanel"></div>
+  </section>
+
+  <section class="view" id="guide">
+    <div class="section-head"><div class="eyebrow">Инструмент 04</div><h2>Краткий справочник</h2><p>Базовые правила, которые полезно применять каждый день.</p></div>
+    <div class="guide-grid">
+      <article class="card"><div class="card-icon">🔑</div><h3>Пароли и аккаунты</h3><p>Используй уникальный пароль для каждого важного аккаунта. По возможности включай двухфакторную аутентификацию и храни пароли в надёжном менеджере.</p><span class="pill">Уникальные пароли</span><span class="pill">2FA</span></article>
+      <article class="card"><div class="card-icon">🧩</div><h3>Обновления</h3><p>Устанавливай обновления операционной системы, браузера и приложений из официальных источников. Обновления часто закрывают известные уязвимости.</p><span class="pill">Обновления</span><span class="pill">Официальные источники</span></article>
+      <article class="card"><div class="card-icon">✉️</div><h3>Фишинг</h3><p>Проверяй домен, контекст сообщения и неожиданные требования срочно войти в аккаунт или передать код. При сомнении открой официальный сайт вручную.</p><span class="pill">Проверка домена</span><span class="pill">Без спешки</span></article>
+      <article class="card"><div class="card-icon">🛡️</div><h3>Антивирусы</h3><p>Используй встроенную или проверенную защиту, оставляй автоматические обновления включёнными и не отключай защиту ради запуска неизвестного файла.</p><span class="pill">Защита в реальном времени</span><span class="pill">Обновлённые базы</span></article>
+      <article class="card"><div class="card-icon">📦</div><h3>Загрузка файлов</h3><p>Скачивай программы с официальных сайтов или проверенных магазинов. Не запускай вложения, которые неожиданно прислали даже знакомые: их аккаунт мог быть взломан.</p><span class="pill">Источник файла</span><span class="pill">Осторожность</span></article>
+      <article class="card"><div class="card-icon">💾</div><h3>Резервные копии</h3><p>Создавай резервные копии важных данных и периодически проверяй, что их действительно можно восстановить.</p><span class="pill">Резервные копии</span><span class="pill">Восстановление</span></article>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap">«КиберЩит» — учебный проект по информатике, 10 класс. Версия 0.2. Не заменяет антивирус, профессиональный аудит или официальные рекомендации по безопасности.</div></footer>
+
+<script>
+  // Навигация между разделами
+  function showView(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === id));
+    document.querySelectorAll('nav button[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === id));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => showView(b.dataset.view)));
+  document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => showView(b.dataset.go)));
+
+  // Модуль самооценки
+  const checkItems = [
+    {text:"На устройстве установлены последние обновления системы.", category:"Обновления"},
+    {text:"Я использую разные пароли для важных аккаунтов.", category:"Аккаунты"},
+    {text:"На важных аккаунтах включена двухфакторная аутентификация.", category:"Аккаунты"},
+    {text:"Я никому не сообщаю пароли и коды подтверждения.", category:"Аккаунты"},
+    {text:"Я использую менеджер паролей или другой надёжный способ их хранения.", category:"Аккаунты"},
+    {text:"Я скачиваю программы только из официальных или проверенных источников.", category:"Приложения"},
+    {text:"На устройстве включена встроенная или другая проверенная защита.", category:"Устройство"},
+    {text:"Я не отключаю защиту ради запуска неизвестного файла.", category:"Устройство"},
+    {text:"Я проверяю адрес сайта перед вводом пароля или платёжных данных.", category:"Ссылки"},
+    {text:"Я настороженно отношусь к сообщениям, требующим срочно перейти по ссылке.", category:"Ссылки"},
+    {text:"Я проверяю неожиданные вложения даже от знакомых отправителей.", category:"Файлы"},
+    {text:"У меня есть резервная копия важных файлов.", category:"Данные"},
+    {text:"На устройстве настроена блокировка экрана.", category:"Устройство"},
+    {text:"Я проверяю разрешения, которые запрашивают приложения.", category:"Конфиденциальность"},
+    {text:"Я знаю, что делать при подозрении на взлом аккаунта.", category:"Реакция на инциденты"}
+  ];
+  const checkBox = document.getElementById('checkQuestions');
+  checkItems.forEach((item, i) => {
+    const div = document.createElement('div'); div.className = 'question';
+    const label = document.createElement('label');
+    const input = document.createElement('input'); input.type = 'checkbox'; input.name = 'safety'; input.value = '1';
+    const span = document.createElement('span'); span.innerHTML = `<strong>${i+1}.</strong> ${item.text}<br><small style="color:var(--muted)">Категория: ${item.category}</small>`;
+    label.append(input, span); div.append(label); checkBox.append(div);
+  });
+  document.getElementById('checkForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const total = checkItems.length;
+    const score = document.querySelectorAll('input[name="safety"]:checked').length;
+    const percent = Math.round(score / total * 100);
+    let level, cls, intro;
+    if (percent >= 75) { level = 'Хорошая база'; cls = 'good'; intro = 'Большинство базовых мер уже применяется. Продолжай поддерживать их в актуальном состоянии.'; }
+    else if (percent >= 40) { level = 'Есть что улучшить'; cls = 'warn'; intro = 'Некоторые меры защиты уже есть, но стоит закрыть несколько пробелов.'; }
+    else { level = 'Нужны улучшения'; cls = 'bad'; intro = 'Начни с простых действий: обновления, уникальные пароли и защита важных аккаунтов.'; }
+    const missing = [...document.querySelectorAll('input[name="safety"]:not(:checked)')].map((_, i) => i);
+    const unchecked = checkItems.filter((_, i) => !document.querySelectorAll('input[name="safety"]')[i].checked);
+    const result = document.getElementById('checkResult');
+    result.className = 'result ' + cls;
+    result.innerHTML = `<h3>${level}: ${percent}%</h3><p>${intro}</p><p><strong>Что стоит проверить:</strong></p>`;
+    if (unchecked.length) {
+      const ul = document.createElement('ul');
+      unchecked.forEach(t => { const li = document.createElement('li'); li.textContent = t.category + ': ' + t.text; ul.append(li); });
+      result.append(ul);
+    } else {
+      const p = document.createElement('p'); p.textContent = 'Ты отметил все основные меры из этой анкеты. Это не гарантирует полную безопасность.'; result.append(p);
+    }
+    const note = document.createElement('p'); note.className = 'small'; note.textContent = 'Это ориентировочная самооценка, а не техническая диагностика устройства.'; result.append(note);
+  });
+  document.getElementById('checkForm').addEventListener('reset', () => { document.getElementById('checkResult').innerHTML = ''; });
+
+  // Анализатор URL: проверяет только видимые признаки адреса, не открывая сайт.
+  document.getElementById('analyzeBtn').addEventListener('click', () => {
+    const raw = document.getElementById('urlInput').value.trim();
+    const out = document.getElementById('urlResult');
+    if (!raw) { out.className = 'result warn'; out.textContent = 'Сначала введи адрес сайта.'; return; }
+    let url;
+    try {
+      const normalized = /^https?:\/\//i.test(raw) ? raw : 'https://' + raw;
+      url = new URL(normalized);
+      if (!['http:', 'https:'].includes(url.protocol)) throw new Error('protocol');
+    } catch {
+      out.className = 'result bad'; out.textContent = 'Не удалось разобрать адрес. Проверь написание URL.'; return;
+    }
+    const flags = [];
+    const host = url.hostname.toLowerCase();
+    if (url.protocol !== 'https:') flags.push('Используется HTTP без шифрования соединения.');
+    if (host.startsWith('xn--') || host.split('.').some(part => part.startsWith('xn--'))) flags.push('В домене есть Punycode-кодировка; проверь, не маскируется ли похожее написание.');
+    if (/^\d{1,3}(\.\d{1,3}){3}$/.test(host)) flags.push('Вместо обычного домена используется IPv4-адрес.');
+    if (host.includes('@') || url.username || url.password) flags.push('В адресе есть символ @ или данные пользователя — внимательно проверь структуру ссылки.');
+    if (host.split('.').length >= 5) flags.push('У домена много уровней поддоменов; проверь, какой именно домен является основным.');
+    if (url.hostname.includes('-') && /(login|secure|verify|account|bonus|gift|free|update)/i.test(url.href)) flags.push('Сочетание дефиса и слов, связанных со входом или бонусами, требует дополнительной проверки.');
+    if (url.href.length > 120) flags.push('Адрес необычно длинный; длинная ссылка сама по себе не доказывает опасность, но её стоит изучить.');
+    if (/%[0-9a-f]{2}/i.test(url.pathname + url.search)) flags.push('В пути или параметрах есть кодированные символы; это бывает нормально, но адрес стоит читать внимательно.');
+    if (!flags.length) flags.push('Автоматические проверки не нашли перечисленных признаков. Это не подтверждает безопасность сайта.');
+    const risky = flags.length >= 3 || (url.protocol !== 'https:' && flags.length >= 2);
+    out.className = 'result ' + (risky ? 'bad' : flags.length > 1 ? 'warn' : 'good');
+    out.innerHTML = `<h3>${risky ? 'Обнаружено несколько признаков для проверки' : 'Результат предварительного анализа'}</h3><p><strong>Домен:</strong> ${escapeHTML(host)}</p>`;
+    const ul = document.createElement('ul');
+    flags.forEach(f => { const li = document.createElement('li'); li.textContent = f; ul.append(li); });
+    out.append(ul);
+    const p = document.createElement('p'); p.className = 'small'; p.textContent = 'Не переходи по сомнительной ссылке. Для дополнительной проверки используй известный сервис репутации URL и не отправляй туда ссылки с приватными токенами.'; out.append(p);
+  });
+  function escapeHTML(s) { return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  // Тренажёр
+  const questions = [
+    { q:'В сообщении требуют срочно войти в аккаунт по ссылке, иначе его заблокируют. Что лучше сделать?', a:['Сразу открыть ссылку','Самостоятельно открыть официальный сайт или приложение','Переслать сообщение друзьям'], correct:1, why:'Срочность и давление часто используются в фишинге. Проверь уведомление через официальный канал.' },
+    { q:'Какой подход к паролям безопаснее?', a:['Один пароль для всех сайтов','Уникальный пароль для каждого важного аккаунта','Пароль с датой рождения'], correct:1, why:'Уникальные пароли уменьшают последствия утечки одного сервиса.' },
+    { q:'Что означает HTTPS?', a:['Сайт точно честный','Соединение шифруется, но сайт может быть мошенническим','На сайте точно нет вредоносных файлов'], correct:1, why:'HTTPS защищает передачу данных, но не гарантирует добросовестность владельца сайта.' },
+    { q:'Друг неожиданно прислал файл и просит срочно открыть. Что делать?', a:['Открыть, потому что отправитель знакомый','Уточнить у друга другим способом, отправлял ли он файл','Отключить антивирус'], correct:1, why:'Аккаунт знакомого мог быть взломан. Неожиданные вложения нужно проверять.' },
+    { q:'Зачем устанавливать обновления системы?', a:['Только ради нового оформления','Они часто исправляют ошибки и уязвимости','Они исключают все угрозы'], correct:1, why:'Обновления закрывают известные уязвимости, но не дают абсолютной защиты.' },
+    { q:'Кому можно сообщать код подтверждения входа?', a:['Никому не передавать его другим людям','Человеку, представившемуся поддержкой','Другу в групповом чате'], correct:0, why:'Код может подтвердить вход или действие. Не сообщай его собеседникам.' },
+    { q:'Что делать с неожиданным вложением от незнакомца?', a:['Запустить и посмотреть','Не открывать и проверить источник','Переименовать и запустить'], correct:1, why:'Не запускай неожиданные файлы. Уточни происхождение у надёжного источника.' },
+    { q:'Как лучше хранить много уникальных паролей?', a:['В открытом текстовом файле на общем компьютере','В надёжном менеджере паролей','В сообщении в социальной сети'], correct:1, why:'Менеджер паролей помогает создавать и хранить уникальные пароли.' },
+    { q:'Сайт просит установить неизвестное расширение браузера. Что делать?', a:['Установить, если сайт настаивает','Проверить источник и необходимость','Отключить настройки безопасности'], correct:1, why:'Расширения могут получать доступ к данным браузера. Устанавливай только необходимые и проверенные.' },
+    { q:'Антивирус предупреждает о скачанном файле. Как поступить?', a:['Игнорировать предупреждение','Не запускать файл и разобраться в причине','Отключить защиту навсегда'], correct:1, why:'Не обходи предупреждение без понимания причины. Проверь источник файла.' },
+    { q:'Какой признак может указывать на фишинговое письмо?', a:['Неожиданная просьба срочно ввести пароль по ссылке','Обычное ожидаемое письмо','Отсутствие картинок'], correct:0, why:'Срочная просьба раскрыть данные или войти по неожиданной ссылке — повод насторожиться.' },
+    { q:'Для чего нужны резервные копии?', a:['Чтобы ускорить интернет','Чтобы восстановить данные после потери или повреждения','Чтобы заменить обновления'], correct:1, why:'Резервная копия помогает вернуть важные данные после поломки или инцидента.' },
+    { q:'Можно ли считать сайт безопасным только из-за HTTPS?', a:['Да, всегда','Нет, HTTPS не гарантирует честность сайта','Да, если сайт красиво оформлен'], correct:1, why:'Замок показывает защищённое соединение, а не проверенную репутацию сайта.' },
+    { q:'Что делать при подозрении на взлом аккаунта?', a:['Игнорировать ситуацию','Через официальный сайт сменить пароль, проверить сеансы и включить MFA','Опубликовать пароль'], correct:1, why:'Используй официальный сервис, проверь сеансы и способы восстановления. При необходимости обратись в поддержку.' },
+    { q:'Как безопаснее подключаться к общественному Wi-Fi?', a:['Подключаться к любой похожей сети','Проверить точное название сети и избегать чувствительных действий в сомнительной сети','Отключить блокировку экрана'], correct:1, why:'Поддельные точки доступа могут имитировать знакомые сети. Уточни название у владельца места.' }
+  ];
+  let qIndex = 0, points = 0, answered = false;
+  const quizPanel = document.getElementById('quizPanel');
+  function renderQuiz() {
+    answered = false;
+    if (qIndex >= questions.length) {
+      quizPanel.innerHTML = `<h2>Тренажёр завершён</h2><p>Твой результат: <strong>${points} из ${questions.length}</strong>.</p><p>${points === questions.length ? 'Отлично! Ты правильно ответил на все вопросы.' : points >= 4 ? 'Хороший результат. Повтори вопросы, где были ошибки.' : 'Стоит повторить основные правила цифровой безопасности и пройти тренажёр ещё раз.'}</p><button class="btn" id="restartQuiz">Пройти ещё раз</button>`;
+      document.getElementById('restartQuiz').addEventListener('click', () => { qIndex = 0; points = 0; renderQuiz(); });
+      return;
+    }
+    const q = questions[qIndex];
+    quizPanel.innerHTML = `<div class="small">Вопрос ${qIndex + 1} из ${questions.length}</div><div class="progress"><span style="width:${qIndex / questions.length * 100}%"></span></div><h3>${q.q}</h3><div id="quizOptions"></div><div id="quizFeedback" aria-live="polite"></div>`;
+    const options = document.getElementById('quizOptions');
+    q.a.forEach((answer, i) => {
+      const b = document.createElement('button'); b.className = 'quiz-option'; b.textContent = answer;
+      b.addEventListener('click', () => chooseAnswer(i)); options.append(b);
+    });
+  }
+  function chooseAnswer(i) {
+    if (answered) return; answered = true;
+    const q = questions[qIndex]; const correct = i === q.correct; if (correct) points++;
+    document.querySelectorAll('.quiz-option').forEach(b => b.disabled = true);
+    const fb = document.getElementById('quizFeedback');
+    fb.className = 'result ' + (correct ? 'good' : 'warn');
+    fb.innerHTML = `<h3>${correct ? 'Верно!' : 'Не совсем.'}</h3><p>${q.why}</p><button class="btn" id="nextQuestion">${qIndex === questions.length - 1 ? 'Показать результат' : 'Следующий вопрос →'}</button>`;
+    document.getElementById('nextQuestion').addEventListener('click', () => { qIndex++; renderQuiz(); });
+  }
+  renderQuiz();
+</script>
+</body>
+</html>
